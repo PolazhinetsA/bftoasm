@@ -2,7 +2,7 @@
 
 char start[] =
   "segment .bss\n"
-  "mem resb 0x1000\n"
+  "mem resd 30000\n"
   "segment .text\n"
   "global _start\n"
   "_start:\n"
@@ -35,15 +35,17 @@ int main (void)
       l = 0;
   while ((ch = getchar()) != EOF) {
     switch (ch) {
-      case '<': puts ("dec rsi"); break;
-      case '>': puts ("inc rsi"); break;
-      case '-': puts ("dec byte [rsi]"); break;
-      case '+': puts ("inc byte [rsi]"); break;
+      case '<': puts ("sub rsi, 4"); break;
+      case '>': puts ("add rsi, 4"); break;
+      case '-': puts ("dec dword [rsi]"); break;
+      case '+': puts ("inc dword [rsi]"); break;
       case ',': puts (in); break;
       case '.': puts (out); break;
-      case '[': printf (".L%d:\n", *p++ = l++); break;
-      case ']': printf ("cmp byte [rsi], 0\n"
-                        "jnz .L%d\n", *--p); break;
+      case '[': printf (".L%1$d:\n"
+                        "cmp dword [rsi], 0\n"
+                        "jz .L%1$d_\n", *p++ = l++); break;
+      case ']': printf ("jmp .L%1$d\n"
+                        ".L%1$d_:\n", *--p); break;
     }
   }
 
