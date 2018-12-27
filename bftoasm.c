@@ -30,7 +30,9 @@ int main (void)
   puts (start);
 
   char ch;
-  int l = 0;
+  int l_[0x1000],
+      *p = l_,
+      l = 0;
   while ((ch = getchar()) != EOF) {
     switch (ch) {
       case '<': puts ("dec rsi"); break;
@@ -39,9 +41,9 @@ int main (void)
       case '+': puts ("inc byte [rsi]"); break;
       case ',': puts (in); break;
       case '.': puts (out); break;
-      case '[': printf (".L%02d:\n", l++); break;
+      case '[': printf (".L%d:\n", *p++ = l++); break;
       case ']': printf ("cmp byte [rsi], 0\n"
-                        "jnz .L%02d\n", --l); break;
+                        "jnz .L%d\n", *--p); break;
     }
   }
 
